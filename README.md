@@ -63,7 +63,7 @@ arrives, a PRD and SPEC get written and reviewed, and tickets land with their
 blocking edges declared.
 
 ```
-grill-me → vision → to-prd → to-spec → to-tickets
+grill-me → vision → nose-up → to-prd → to-spec → to-tickets
 ```
 
 The **inner loop** turns one ticket into a merged PR. Every slice walks it start
@@ -87,6 +87,8 @@ lesson, not a reason to run two.
 ### Outer
 
 - **grill-me** — Interviews you relentlessly about a plan or design, one question
+- **nose-up** — tears a proposal, plan, PR, or design down to the simplest version that actually works, from a hostile Redditor register. Counts the complexity budget, demands a boring alternative for every abstraction it flags, and closes with ship-it / cut-these / don't. Complements `scrutinize`: that's the cold outsider review, this is the one with attitude and a bias toward killing your darlings.
+- **spawn-whymage** — provisions a Whymage: an infra diagnostician for daemons, worktrees, artifact handshakes, and dispatch, which debugs with evidence-backed why-trees instead of guesses. Carries the role's non-negotiables (descent, ascent, observe-before-prescribe, the hard-won rules) plus real Hermes profile commands and the two silent provisioning traps. Agent-agnostic — works anywhere that reads a durable markdown prompt.
   at a time, resolving each branch of the decision tree and giving a recommended
   answer for each. Explores the codebase instead of asking you what the code says.
 - **vision** — Mines what you actually build (merged PRs, commit history) and
@@ -159,6 +161,11 @@ fork this.
 extra CLI pitfalls, a provenance footer, and a self-contained interview
 procedure. **Do not re-sync them from upstream without diffing first**, or you
 will silently lose that work.
+
+### On `nose-up`
+
+This one is first-party. It ships because a brutal gut-check before you lock a
+SPEC is cheaper than the rewrite after you do.
 
 ## License
 
