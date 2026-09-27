@@ -32,6 +32,19 @@ npx skills add branben/school-core-skills to-tickets
 Requires a repo with a readable history — several skills read merged PRs or
 commit log to work out what a project actually values.
 
+> **Installing overwrites.** `npx skills add` replaces any existing skill of the
+> same name, with no prompt and no diff. If you've edited your copy of a skill
+> in this repo, **diff before you install** — otherwise the edit is gone.
+> Installs are tracked in `skills-lock.json`; `npx skills remove` undoes one
+> (bare `npx skills remove` gives you a picker).
+>
+> To pull in a single skill without writing any files, use the `@` form —
+> `npx skills use branben/school-core-skills@to-tickets` — which prints the
+> skill for the agent to follow. Two things that do **not** work:
+> `npx skills add branben/school-core-skills to-tickets` installs all 16, and
+> `npx skills use branben/school-core-skills to-tickets` errors with
+> "Expected one source, received 2".
+
 ## Layout
 
 Skills live under `skills/`, grouped by loop:
