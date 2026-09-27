@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test scenario — answer to verify</title>
+<style>
+  :root {
+    --ivory:  #FAF9F5;
+    --paper:  #FFFFFF;
+    --slate:  #141413;
+    --clay:   #D97757;
+    --clay-d: #B85C3E;
+    --oat:    #E3DACC;
+    --olive:  #788C5D;
+    --g100:   #F0EEE6;
+    --g200:   #E6E3DA;
+    --g300:   #D1CFC5;
+    --g500:   #87867F;
+    --g700:   #3D3D3A;
+    --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ivory);
+    color: var(--slate);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 100px; }
+  header { padding: 56px 0 8px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--g500);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before { content: ""; width: 24px; height: 1.5px; background: var(--clay); flex: none; }
+  h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(30px, 5vw, 44px); line-height: 1.08;
+    letter-spacing: -0.018em; margin: 0 0 10px;
+  }
+  .lede { font-size: 16.5px; color: var(--g700); max-width: 640px; margin: 0 0 30px; }
+
+  .artifact {
+    background: var(--paper);
+    border: 1.5px solid var(--g300);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .art-head { padding: 20px 30px 0; }
+  .art-head .label {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--clay); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .art-head .label::before { content: ""; width: 24px; height: 1.5px; background: var(--clay); flex: none; }
+  .stage { padding: 28px 30px 30px; position: relative; }
+  @media (max-width: 720px) { .stage { padding: 22px 18px 24px; } .art-head { padding: 18px 18px 0; } }
+
+  .qcard { animation: qin .28s ease both; }
+  .qcard.leaving { animation: qout .18s ease both; }
+  @keyframes qin  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes qout { from { opacity: 1; } to { opacity: 0; transform: translateY(-8px); } }
+
+  .badge {
+    display: inline-block; font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px;
+    border-radius: 5px; color: #fff; background: var(--g500); margin-bottom: 4px;
+  }
+  .qnum { font-family: var(--mono); font-size: 11.5px; color: var(--g500); margin-left: 10px; }
+  .qtext {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(20px, 3vw, 25px); line-height: 1.25;
+    letter-spacing: -0.012em; margin: 10px 0 6px; max-width: 34em;
+  }
+  .why { font-size: 13.5px; color: var(--g500); margin: 0 0 22px; display: flex; gap: 8px; align-items: baseline; }
+  .why::before { content: "↳"; color: var(--clay); flex: none; }
+
+  .opts { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 620px) { .opts { grid-template-columns: 1fr; } }
+  .opt {
+    text-align: left; background: var(--ivory);
+    border: 1.5px solid var(--g300); border-radius: 11px;
+    padding: 14px 16px; cursor: pointer;
+    font-family: var(--sans); color: var(--slate);
+    transition: border-color .12s, background .12s, transform .12s;
+  }
+  .opt:hover { border-color: var(--clay); background: var(--paper); transform: translateY(-1px); }
+  .opt.picked { border-color: var(--clay); background: var(--paper); box-shadow: 0 0 0 3px rgba(217,119,87,.15); }
+  .opt .ot { font-weight: 600; font-size: 14.5px; display: block; margin-bottom: 3px; }
+  .opt .od { font-size: 12.5px; color: var(--g500); line-height: 1.45; display: block; }
+
+  .otherrow { display: flex; gap: 8px; margin-top: 12px; }
+  .otherrow input {
+    flex: 1; min-width: 0; font-family: var(--sans); font-size: 14px;
+    padding: 10px 13px; border: 1.5px solid var(--g300); border-radius: 9px;
+    background: var(--ivory); color: var(--slate);
+  }
+  .otherrow input::placeholder { color: var(--g500); }
+  .otherrow input:focus { outline: none; border-color: var(--clay); background: var(--paper); }
+  .otherrow button {
+    font-family: var(--mono); font-size: 12px; padding: 0 16px;
+    border-radius: 9px; cursor: pointer; border: 1.5px solid var(--g300);
+    background: var(--g100); color: var(--g700);
+  }
+  .otherrow button:hover { border-color: var(--clay); color: var(--clay-d); }
+
+  .navrow { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+  .backbtn {
+    font-family: var(--mono); font-size: 12px; background: none;
+    border: none; cursor: pointer; color: var(--g500); padding: 6px 0;
+  }
+  .backbtn:hover { color: var(--clay-d); }
+  .backbtn[disabled] { visibility: hidden; }
+  .navhint { font-family: var(--mono); font-size: 11px; color: var(--g500); }
+
+  /* SUBMIT BAR */
+  .submitbar {
+    margin: 0 30px 28px; padding: 18px 20px;
+    background: var(--g100); border: 1.5px solid var(--g300); border-radius: 12px;
+  }
+  @media (max-width: 720px) { .submitbar { margin: 0 18px 20px; } }
+  .submitbar .sb-h {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--g500); margin-bottom: 10px;
+  }
+  .sb-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .primary {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em;
+    padding: 11px 20px; border-radius: 9px; cursor: pointer;
+    border: 1.5px solid var(--olive); background: var(--olive); color: #fff;
+  }
+  .primary:hover { background: #66794f; }
+  .primary:disabled { opacity: .45; cursor: not-allowed; }
+  .secondary {
+    font-family: var(--mono); font-size: 12.5px; padding: 11px 18px;
+    border-radius: 9px; cursor: pointer; border: 1.5px solid var(--g300);
+    background: var(--paper); color: var(--g700);
+  }
+  .secondary:hover { border-color: var(--clay); color: var(--clay-d); }
+  .sb-status { font-family: var(--mono); font-size: 11.5px; color: var(--g500); }
+  .sb-note { font-size: 12.5px; color: var(--g500); margin: 10px 0 0; }
+
+  .summary { display: none; }
+  .summary.on { display: block; }
+  .stage.off { display: none; }
+  .sum-h { font-family: var(--serif); font-weight: 500; font-size: 24px; letter-spacing: -0.012em; margin: 4px 0 4px; }
+  .sum-sub { font-size: 14px; color: var(--g500); margin: 0 0 20px; }
+  .dtable { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .dtable-scroll { overflow-x: auto; }
+  .dtable th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--g500); font-weight: 500;
+    text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1.5px solid var(--g300); white-space: nowrap;
+  }
+  .dtable td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--g200); vertical-align: top; }
+  .dtable tr:last-child td { border-bottom: none; }
+  .dtable .topic { color: var(--g500); white-space: nowrap; }
+  .dtable .dec { font-weight: 600; }
+  .restart {
+    margin-top: 18px; font-family: var(--mono); font-size: 12px;
+    background: none; border: none; cursor: pointer; color: var(--g500); padding: 0;
+  }
+  .restart:hover { color: var(--clay-d); }
+  .manual { width: 100%; margin-top: 10px; font-family: var(--mono); font-size: 12px; }
+  footer {
+    margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--g300);
+    font-size: 13px; color: var(--g500);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Test scenario gate</div>
+    <h1>Verify the claim before you trust it</h1>
+    <p class="lede">These questions exist because a real user action could surface
+      something the agent asserted but never ran. Answer what you actually expect to
+      happen — the agent is reading your answers, not a script.</p>
+  </header>
+
+  <div class="artifact">
+    <div class="art-head">
+      <div class="label">What Claude produced — annotation export</div>
+    </div>
+
+    <div class="stage" id="stage"><!-- questions render here --></div>
+
+    <div class="summary" id="summary">
+      <div class="sum-h">Your answers</div>
+      <p class="sum-sub">Review, then send to the agent.</p>
+      <div class="dtable-scroll">
+        <table class="dtable">
+          <thead><tr><th>ID</th><th>Question</th><th>Your answer</th></tr></thead>
+          <tbody id="sumbody"></tbody>
+        </table>
+      </div>
+      <div class="sb-row" style="margin-top:20px">
+        <button class="primary" id="sendFinal">Send answers to agent</button>
+        <button class="secondary" id="copyBtn" type="button">Copy all answers</button>
+        <span class="sb-status" id="copyStatus" role="status" aria-live="polite"></span>
+      </div>
+      <textarea class="manual" id="manualBox" rows="6" aria-label="Answers to copy manually" style="display:none"></textarea>
+      <button class="restart" id="restart">← Change an answer</button>
+    </div>
+
+    <div class="submitbar" id="submitbar">
+      <div class="sb-h">Send to agent</div>
+      <div class="sb-row">
+        <button class="primary" id="sendNow">Send these answers</button>
+        <button class="secondary" id="copyBtn2" type="button">Copy all answers</button>
+        <span class="sb-status" id="copyStatus2" role="status" aria-live="polite"></span>
+      </div>
+      <p class="sb-note">If Lavish is running, answers arrive at the agent directly.
+        If this page was opened by double-clicking, copy them into the chat instead.</p>
+      <textarea class="manual" id="manualBox2" rows="6" aria-label="Answers to copy manually" style="display:none"></textarea>
+    </div>
+  </div>
+
+  <footer>
+    Design cloned from <a href="https://thariqs.github.io/html-effectiveness/unknowns/06-interview.html">Know your unknowns — The interview</a> (Thariq S.). Warm palette, card idiom.
+  </footer>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// AGENT: replace QUESTIONS with the real test-scenario questions.
+// Each needs a STABLE id — the agent must return one outcome per id.
+// ─────────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    id: "TS-01",
+    topic: "trigger",
+    text: "What does the user do that should expose the mechanic?",
+    why: "A test scenario with no trigger is a claim, not a test.",
+    options: [
+      { t: "Load the page cold", d: "No prior session, empty cache — the default first-run experience." },
+      { t: "Act on an existing record", d: "The common path once there is data in the system." }
+    ]
+  },
+  {
+    id: "TS-02",
+    topic: "observable",
+    text: "What should you see if the claim holds?",
+    why: "If you cannot state the observable, the claim is not testable.",
+    options: [
+      { t: "A visible error naming the cause", d: "Honest failure beats a silent one." },
+      { t: "Correct output, no warning", d: "The bug is not present on this path." }
+    ]
+  },
+  {
+    id: "TS-03",
+    topic: "discriminator",
+    text: "What would tell you the agent was wrong?",
+    why: "This is the question that separates a real test from a rubber stamp.",
+    options: [
+      { t: "It works in every case", d: "The agent overstated a narrow, fixed case." },
+      { t: "It fails the same way twice", d: "Reproducible — worth a bug." },
+      { t: "It never reproduces", d: "UNPROVEN claim; the agent asserted without running." }
+    ]
+  }
+];
+
+const state = QUESTIONS.map(() => ({ picked: null, other: "" }));
+let view = 0;
+
+const stage    = document.getElementById("stage");
+const submitbar= document.getElementById("submitbar");
+const summary  = document.getElementById("summary");
+const sumbody  = document.getElementById("sumbody");
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function render() {
+  const q = QUESTIONS[view];
+  stage.innerHTML = `
+    <div class="qcard">
+      <span class="badge">${esc(q.topic)}</span>
+      <span class="qnum">Question ${view + 1} of ${QUESTIONS.length}</span>
+      <h2 class="qtext">${esc(q.text)}</h2>
+      <p class="why">${esc(q.why)}</p>
+      <div class="opts">
+        ${q.options.map((o, i) => `
+          <button type="button" class="opt${state[view].picked === i ? " picked" : ""}" data-i="${i}">
+            <span class="ot">${esc(o.t)}</span>
+            <span class="od">${esc(o.d)}</span>
+          </button>`).join("")}
+      </div>
+      <div class="otherrow">
+        <input type="text" id="otherInput" placeholder="Something else…"
+               aria-label="Your own answer" value="${esc(state[view].other)}">
+        <button type="button" id="otherSet">Use this</button>
+      </div>
+      <div class="navrow">
+        <button class="backbtn" id="prev" ${view === 0 ? "disabled" : ""}>← previous</button>
+        <span class="navhint">${view === QUESTIONS.length - 1
+          ? "last question — then send" : "pick a card to continue"}</span>
+      </div>
+    </div>`;
+
+  stage.querySelectorAll(".opt").forEach(b => {
+    b.addEventListener("click", () => {
+      state[view].picked = +b.dataset.i;
+      state[view].other = "";
+      stage.querySelectorAll(".opt").forEach(x => x.classList.remove("picked"));
+      b.classList.add("picked");
+      if (view < QUESTIONS.length - 1) setTimeout(() => { view++; render(); }, 160);
+    });
+  });
+
+  const oi = document.getElementById("otherInput");
+  oi.addEventListener("input", () => { state[view].other = oi.value; });
+  document.getElementById("otherSet").addEventListener("click", () => {
+    state[view].other = oi.value.trim();
+    if (state[view].other) {
+      state[view].picked = -1;
+      if (view < QUESTIONS.length - 1) setTimeout(() => { view++; render(); }, 160);
+    }
+  });
+  oi.addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("otherSet").click(); });
+
+  document.getElementById("prev").addEventListener("click", () => {
+    if (view > 0) { view--; render(); }
+  });
+}
+
+function answerOf(i) {
+  const s = state[i];
+  if (s.other) return s.other;
+  if (s.picked != null && s.picked >= 0) return QUESTIONS[i].options[s.picked].t;
+  return null;
+}
+
+function items() {
+  return QUESTIONS.map((q, i) => ({
+    id: q.id,
+    topic: q.topic,
+    question: q.text,
+    answer: answerOf(i)
+  })).filter(x => x.answer);
+}
+
+function answersText() {
+  return QUESTIONS.map((q, i) => {
+    const a = answerOf(i);
+    return a ? `${q.id} (${q.topic}): ${a}` : null;
+  }).filter(Boolean).join("\n");
+}
+
+function showSummary() {
+  const its = items();
+  if (!its.length) return;
+  stage.classList.add("off");
+  submitbar.style.display = "none";
+  summary.classList.add("on");
+  sumbody.innerHTML = its.map(x => `
+    <tr><td class="topic">${esc(x.id)}</td><td>${esc(x.question)}</td>
+    <td class="dec">${esc(x.answer)}</td></tr>`).join("");
+}
+
+// Queue the answers to the agent. Fires exactly ONCE per click —
+// never from a radio/option change handler (the user can still change their mind).
+function send() {
+  const its = items();
+  if (!its.length) return;
+  const ids = its.map(x => x.id);
+  if (window.lavish && typeof window.lavish.queuePrompt === "function") {
+    window.lavish.queuePrompt(
+      `Test scenario answered (${its.length} question${its.length > 1 ? "s" : ""}). ` +
+      `Give every ID exactly one outcome: verified with evidence, or not reproduced. ` +
+      `IDs: ${ids.join(", ")}. Do not claim any of these were executed.`,
+      {
+        tag: "tracked-batch",
+        text: `Test scenario answers: ${its.map(x => x.id + "=" + x.answer).join("; ")}`,
+        data: { kind: "test-scenario", items: its }
+      }
+    );
+    // queuePrompt only STAGES. Without sendQueuedPrompts() the answers sit in
+    // Lavish's queue and `lavish-axi poll` never returns them.
+    if (typeof window.lavish.sendQueuedPrompts === "function") {
+      window.lavish.sendQueuedPrompts();
+    }
+    const st = document.getElementById("copyStatus");
+    const st2 = document.getElementById("copyStatus2");
+    const msg = "Sent to the agent.";
+    if (st) st.textContent = msg;
+    if (st2) st2.textContent = msg;
+  } else {
+    fallback();
+  }
+}
+
+// Works with no Lavish server and no Hermes: copy to clipboard, paste in chat.
+function fallback() {
+  const text = answersText();
+  const doCopy = async (btn) => {
+    const status = btn.parentElement.querySelector(".sb-status");
+    const box = btn.parentElement.querySelector(".manual");
+    try {
+      if (typeof navigator.clipboard?.writeText !== "function") throw new Error("no clipboard");
+      await navigator.clipboard.writeText(text);
+      status.textContent = "Answers copied — paste into the chat.";
+    } catch {
+      box.style.display = "block";
+      box.value = text;
+      box.focus();
+      box.select();
+      status.textContent = "Clipboard unavailable — copy the text below.";
+    }
+  };
+  doCopy(document.getElementById("copyBtn"));
+  doCopy(document.getElementById("copyBtn2"));
+}
+
+document.getElementById("sendNow").addEventListener("click", send);
+document.getElementById("sendFinal").addEventListener("click", send);
+document.getElementById("copyBtn").addEventListener("click", fallback);
+document.getElementById("copyBtn2").addEventListener("click", fallback);
+document.getElementById("restart").addEventListener("click", () => {
+  summary.classList.remove("on");
+  stage.classList.remove("off");
+  submitbar.style.display = "";
+  view = 0;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
